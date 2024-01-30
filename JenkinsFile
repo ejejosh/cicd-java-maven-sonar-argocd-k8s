@@ -1,0 +1,21 @@
+pipeline {
+  stages {
+    stage('Checkout') {
+      
+    }
+    stage('Build and Test') {
+      steps {
+        
+      }
+    }
+    stage('Static Code Analysis') {
+      
+    }
+    stage('Build and Push Docker Image') {
+      
+    }
+    stage('Update Deployment File') {
+        
+    }
+  }
+}
