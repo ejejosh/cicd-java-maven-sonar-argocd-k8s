@@ -1,7 +1,16 @@
 pipeline {
+  agent {
+    docker {
+      image 'ejejosh/maven-ejejosh-docker-agent:v1'
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
+    }
+  }
   stages {
     stage('Checkout') {
-      
+      steps {
+        sh 'echo passed'
+        git branch: 'main', url: 'https://github.com/ejejosh/cicd-java-maven-sonar-argocd-k8s.git'
+      }  
     }
     stage('Build and Test') {
       steps {
