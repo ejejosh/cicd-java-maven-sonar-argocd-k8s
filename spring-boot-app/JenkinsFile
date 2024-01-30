@@ -48,7 +48,23 @@ pipeline {
       
     }
     stage('Update Deployment File') {
-        
+        environment {
+            GIT_REPO_NAME = "cicd-java-maven-sonar-argocd-k8s"
+            GIT_USER_NAME = "ejejosh"
+        }
+        steps {
+            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    git config user.email "fetchmrjosh@gmail.com"
+                    git config user.name "ejejosh"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" cicd-java-maven-sonar-argocd-k8s/spring-boot-app-manifests/deployment.yml
+                    git add cicd-java-maven-sonar-argocd-k8s/spring-boot-app-manifests/deployment.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                '''
+            }
+        }    
     }
   }
 }
